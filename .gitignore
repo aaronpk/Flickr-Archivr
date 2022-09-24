@@ -1,0 +1,4 @@
+vendor/
+.env
+photos/
+.DS_Store

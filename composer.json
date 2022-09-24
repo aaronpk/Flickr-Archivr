@@ -1,0 +1,6 @@
+{
+    "require": {
+        "samwilson/phpflickr": "^4.14",
+        "vlucas/phpdotenv": "^5.4"
+    }
+}
