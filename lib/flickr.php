@@ -104,15 +104,7 @@ function savePhoto($info) { // can be an item from flickr.people.getPhotos or an
     if($size['label'] == 'Video Player')
       continue;
 
-    if($size['media'] == 'video') {
-      # Optimistically use mp4 as the file extension, but change it later after downloaded if necessary
-      if($size['label'] == 'Video Original')
-        $filename = $folder.'/'.$info['id'].'.mp4';
-      else
-        $filename = $sizesFolder.'/'.$size['label'].'.mp4';
-    } else {
-      $filename = ($size['label'] == 'Original' ? $folder : $sizesFolder).'/'.basename($size['source']);
-    }
+    $filename = $folder.'/'.sizeToFilename($info['id'], $size);
 
     echo "Downloading ".$size['source']." to $filename\n";
 
@@ -135,6 +127,22 @@ function savePhoto($info) { // can be an item from flickr.people.getPhotos or an
 
   if(isset($comments))
     file_put_contents($infoFolder.'/comments.json', json_encode($comments, JSON_PP));
+}
+
+function sizeToFilename($id, $size) {
+  $sizesFolder = 'sizes/';
+
+  if($size['media'] == 'video') {
+    # Optimistically use mp4 as the file extension, but change it later after downloaded if necessary
+    if($size['label'] == 'Video Original')
+      $filename = $id.'.mp4';
+    else
+      $filename = $sizesFolder.$size['label'].'.mp4';
+  } else {
+    $filename = ($size['label'] == 'Original' ? '' : $sizesFolder).basename($size['source']);
+  }
+
+  return $filename;
 }
 
 function dateFromTitle($title) {
