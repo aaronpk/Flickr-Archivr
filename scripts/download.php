@@ -36,6 +36,7 @@ function processPage($page) {
     'user_id' => 'me',
     'per_page' => 10,
     'page' => $page,
+    'extras' => 'date_upload,date_taken',
   ]);
 
   if(!isset($result['photos'])) {
@@ -45,8 +46,13 @@ function processPage($page) {
 
   $photos = $result['photos'];
 
-  foreach($photos['photo'] as $photo) {
-    savePhoto($photo);
+  try {
+    foreach($photos['photo'] as $photo) {
+      savePhoto($photo);
+    }
+  } catch(Exception $e) {
+    echo "EXCEPTION: ".$e->getMessage()."\n";
+    # try again
   }
 
   $progress['page'] = $page;
@@ -62,6 +68,22 @@ function processPage($page) {
 
 function savePhoto($info) {
   global $flickr;
+
+  # Check if it's already been saved
+  if($info['datetakenunknown']) {
+    $date = DateTime::createFromFormat('U', $info['dateupload']);
+  } else {
+    $date = new DateTime($info['datetaken']);
+  }
+
+  $folder = $_ENV['STORAGE_PATH'].$date->format('Y/m/d').'/'.$info['id'];
+  $infoFolder = $folder.'/info';
+  $sizesFolder = $folder.'/sizes';
+
+  if(file_exists($sizesFolder.'/'.$info['id'].'_'.$info['secret'].'.jpg')) {
+    echo "Already downloaded ".$info['id']."\n";
+    return;
+  }
 
   echo "Archiving photo: ".$info['id']."\n";
 
@@ -99,10 +121,6 @@ function savePhoto($info) {
   } else {
     $date = new DateTime($photo['dates']['taken']);
   }
-
-  $folder = $_ENV['STORAGE_PATH'].$date->format('Y/m/d').'/'.$info['id'];
-  $infoFolder = $folder.'/info';
-  $sizesFolder = $folder.'/sizes';
 
   if(!file_exists($folder)) {
     mkdir($folder, 0755, true);
