@@ -52,6 +52,7 @@ function processPage($page) {
     }
   } catch(Exception $e) {
     echo "EXCEPTION: ".$e->getMessage()."\n";
+    die();
     # try again
   }
 
