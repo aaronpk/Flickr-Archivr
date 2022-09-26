@@ -6,3 +6,6 @@ define('JSON_PP', JSON_PRETTY_PRINT+JSON_UNESCAPED_SLASHES);
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__.'/..');
 $dotenv->load();
 
+function prettyJSON($json) {
+  return json_encode($json, JSON_PP);
+}

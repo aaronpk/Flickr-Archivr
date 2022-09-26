@@ -26,7 +26,7 @@ Choose a folder to download everything into. It may require a lot of disk space 
 php scripts/download.php
 ```
 
-## Folder Structure
+### Folder Structure
 
 Photos are downloaded to a folder structure like the below, based on the date the photo was taken (if available) otherwise the date the photo was uploaded.
 
@@ -73,5 +73,16 @@ Each photo gets its own folder at: `YEAR/MONTH/DAY/PHOTO_ID/`. Inside the folder
   * `exif.json` - The complete exif data
   * `sizes.json` - Info about all the sizes of the photo available
   * `comments.json` - If present, all the comments on the photo
+
+
+## Index Photos
+
+Run the index script to build an index of all the photos. Since photos are stored in a folder by date, this index helps other parts of the system find the photos on disk by just their photo ID. 
+
+```bash
+php scripts/indexphotos.php
+```
+
+
 
 
