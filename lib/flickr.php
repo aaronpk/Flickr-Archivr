@@ -88,6 +88,13 @@ function savePhoto($info) { // can be an item from flickr.people.getPhotos or an
     # print_r($comments);
   }
 
+  if($photo['people']['haspeople']) {
+    $result = $flickr->request('flickr.photos.people.getList', [
+      'photo_id' => $info['id'],
+    ]);
+    $people = $result['people']['person'];
+  }
+
   if($photo['dates']['takenunknown']) {
     $date = DateTime::createFromFormat('U', $photo['dateuploaded']);
   } else {
@@ -127,6 +134,9 @@ function savePhoto($info) { // can be an item from flickr.people.getPhotos or an
 
   if(isset($comments))
     file_put_contents($infoFolder.'/comments.json', json_encode($comments, JSON_PP));
+
+  if(isset($people))
+    file_put_contents($infoFolder.'/people.json', json_encode($people, JSON_PP));
 }
 
 function sizeToFilename($id, $size) {
