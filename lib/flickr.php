@@ -19,30 +19,50 @@ function getFlickrClient() {
   return $flickr;
 }
 
+function getPhotoDate($info) {
+
+  if(!isset($info['dates']) && !isset($info['dateupload']))
+    return null;
+
+  if(isset($info['dates'])) {
+    $taken = $info['dates']['taken'];
+    $takenunknown = $info['dates']['takenunknown'];
+    $uploaded = $info['dateuploaded'];
+  } else {
+    $taken = $info['datetaken'];
+    $takenunknown = $info['datetakenunknown'];
+    $uploaded = $info['dateupload'];
+  }
+  $title = $info['title'];
+
+  $date = null;
+
+  # If Flickr says the date taken is unknown, try to find it from the title
+  if($takenunknown) {
+    $date = dateFromTitle($title);
+  }
+
+  if(!$date) {
+    # If there is a value in $taken, it may be just the date the photo was uploaded, 
+    # but it will be in the correct timezone, so use that.
+    if($taken) {
+      $date = new DateTime($taken);
+    }
+  }
+
+  # If we haven't found a date yet, Flickr will always set the upload date, so use that
+  if(!$date) {
+    $date = DateTime::createFromFormat('U', $uploaded);
+  }
+
+  return $date;
+}
+
 function savePhoto($info, $skip_if_exists=true) { // can be an item from flickr.people.getPhotos or an item from flickr.photos.getInfo
   global $flickr;
 
-  if(isset($info['dates'])) {
-    # This is the response from flickr.photos.getInfo
-    if($info['dates']['takenunknown']) {
-      if($date=dateFromTitle($info['title'])) {}
-      else {
-        $date = DateTime::createFromFormat('U', $info['dateuploaded']);
-      }
-    } else {
-      $date = new DateTime($info['dates']['taken']);
-    }
-  } elseif(isset($info['datetakenunknown'])) {
-    # This is the response from flickr.people.getPhotos
-    if($info['datetakenunknown']) {
-      if($date=dateFromTitle($info['title'])) {}
-      else {
-        $date = DateTime::createFromFormat('U', $info['dateupload']);
-      }
-    } else {
-      $date = new DateTime($info['datetaken']);
-    }
-  } else {
+  $date = getPhotoDate($info);
+  if(!$date) {
     echo "savePhoto() called with something that doesn't appear to be a Flickr photo\n";
     return;
   }
@@ -79,6 +99,12 @@ function savePhoto($info, $skip_if_exists=true) { // can be an item from flickr.
   ]);
   $exif = $result['photo']['exif'];
   # print_r($exif);
+
+  $result = $flickr->request('flickr.photos.getAllContexts', [
+    'photo_id' => $info['id'],
+  ]);
+  if(isset($result['pool']))
+    $groups = $result['pool'];
 
   if($photo['comments'] > 0) {
     $result = $flickr->request('flickr.photos.comments.getList', [
@@ -130,7 +156,12 @@ function savePhoto($info, $skip_if_exists=true) { // can be an item from flickr.
   // If the json files don't exist, the script will retry the photo.
   file_put_contents($infoFolder.'/photo.json', json_encode($photo, JSON_PP));
   file_put_contents($infoFolder.'/sizes.json', json_encode($sizes, JSON_PP));
-  file_put_contents($infoFolder.'/exif.json', json_encode($exif, JSON_PP));
+
+  if($exif)
+    file_put_contents($infoFolder.'/exif.json', json_encode($exif, JSON_PP));
+
+  if(isset($groups))
+    file_put_contents($infoFolder.'/groups.json', json_encode($groups, JSON_PP));
 
   if(isset($comments))
     file_put_contents($infoFolder.'/comments.json', json_encode($comments, JSON_PP));
