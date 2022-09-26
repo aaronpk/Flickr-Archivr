@@ -19,7 +19,7 @@ function getFlickrClient() {
   return $flickr;
 }
 
-function savePhoto($info) { // can be an item from flickr.people.getPhotos or an item from flickr.photos.getInfo
+function savePhoto($info, $skip_if_exists=true) { // can be an item from flickr.people.getPhotos or an item from flickr.photos.getInfo
   global $flickr;
 
   if(isset($info['dates'])) {
@@ -52,7 +52,7 @@ function savePhoto($info) { // can be an item from flickr.people.getPhotos or an
   $sizesFolder = $folder.'/sizes';
 
   # Check if it's already been saved
-  if(file_exists($infoFolder.'/photo.json')) {
+  if($skip_if_exists && $file_exists($infoFolder.'/photo.json')) {
     echo "Already downloaded ".$info['id']."\n";
     return;
   }
