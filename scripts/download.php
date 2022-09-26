@@ -51,7 +51,11 @@ function processPage($page) {
       savePhoto($photo);
     }
   } catch(Exception $e) {
-    echo "EXCEPTION: ".$e->getMessage()."\n";
+    $message = $e->getMessage();
+    if(($p=strpos($message, '<!DOCTYPE html>')) !== false) {
+      $message = substr($message, 0, $p);
+    }
+    echo "EXCEPTION: ".$message."\n";
     die();
     # try again
   }
