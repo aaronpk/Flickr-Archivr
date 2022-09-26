@@ -41,7 +41,7 @@ function processPage($page) {
 
   if(!isset($result['photos'])) {
     echo "Error downloading photos\n";
-    die();
+    die(1);
   }
 
   $photos = $result['photos'];
@@ -56,7 +56,7 @@ function processPage($page) {
       $message = substr($message, 0, $p);
     }
     echo "EXCEPTION: ".$message."\n";
-    die();
+    die(1);
     # try again
   }
 
@@ -66,8 +66,6 @@ function processPage($page) {
 
   return $photos;
 }
-
-
 
 
 

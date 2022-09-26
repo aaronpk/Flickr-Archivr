@@ -3,7 +3,7 @@
 function getFlickrClient() {
   if(empty($_ENV['FLICKR_ACCESS_TOKEN'])) {
     echo "Not logged in! Run scripts/login.php first and save the access token into the .env file\n";
-    die();
+    die(2);
   }
 
   $token = new \OAuth\OAuth1\Token\StdOAuth1Token();
