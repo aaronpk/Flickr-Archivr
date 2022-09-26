@@ -2,5 +2,11 @@
     "require": {
         "samwilson/phpflickr": "^4.14",
         "vlucas/phpdotenv": "^5.4"
+    },
+    "autoload": {
+        "files": [
+          "lib/init.php",
+          "lib/flickr.php"
+        ]
     }
 }

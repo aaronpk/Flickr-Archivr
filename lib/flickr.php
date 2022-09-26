@@ -1,5 +1,24 @@
 <?php
 
+function getFlickrClient() {
+  if(empty($_ENV['FLICKR_ACCESS_TOKEN'])) {
+    echo "Not logged in! Run scripts/login.php first and save the access token into the .env file\n";
+    die();
+  }
+
+  $token = new \OAuth\OAuth1\Token\StdOAuth1Token();
+  $token->setAccessToken($_ENV['FLICKR_ACCESS_TOKEN']);
+  $token->setAccessTokenSecret($_ENV['FLICKR_ACCESS_TOKEN_SECRET']);
+  $storage = new \OAuth\Common\Storage\Memory();
+  $storage->storeAccessToken('Flickr', $token);
+
+  $flickr = new \Samwilson\PhpFlickr\PhpFlickr($_ENV['FLICKR_API_KEY'], $_ENV['FLICKR_API_SECRET']);
+
+  $flickr->setOauthStorage($storage);
+
+  return $flickr;
+}
+
 function savePhoto($info) {
   global $flickr;
 
@@ -14,7 +33,7 @@ function savePhoto($info) {
   $infoFolder = $folder.'/info';
   $sizesFolder = $folder.'/sizes';
 
-  if(file_exists($infoFolder.'/photo.json') {
+  if(file_exists($infoFolder.'/photo.json')) {
     echo "Already downloaded ".$info['id']."\n";
     return;
   }
