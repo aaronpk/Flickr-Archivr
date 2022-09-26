@@ -14,7 +14,7 @@ function savePhoto($info) {
   $infoFolder = $folder.'/info';
   $sizesFolder = $folder.'/sizes';
 
-  if(file_exists($sizesFolder.'/'.$info['id'].'_'.$info['secret'].'.jpg')) {
+  if(file_exists($infoFolder.'/photo.json') {
     echo "Already downloaded ".$info['id']."\n";
     return;
   }
@@ -62,12 +62,6 @@ function savePhoto($info) {
   if(!file_exists($infoFolder)) { mkdir($infoFolder); }
   if(!file_exists($sizesFolder)) { mkdir($sizesFolder); }
 
-  file_put_contents($infoFolder.'/photo.json', json_encode($photo, JSON_PP));
-  file_put_contents($infoFolder.'/sizes.json', json_encode($sizes, JSON_PP));
-  file_put_contents($infoFolder.'/exif.json', json_encode($exif, JSON_PP));
-  if(isset($comments))
-    file_put_contents($infoFolder.'/comments.json', json_encode($comments, JSON_PP));
-
   foreach($sizes as $size) {
     $filename = ($size['label'] == 'Original' ? $folder : $sizesFolder).'/'.basename($size['source']);
     echo "Downloading ".$size['source']." to $filename\n";
@@ -80,5 +74,13 @@ function savePhoto($info) {
     fclose($fp);
   }
 
+  // Write the json files last as an indication that the whole process has successfully completed.
+  // If the json files don't exist, the script will retry the photo.
+  file_put_contents($infoFolder.'/photo.json', json_encode($photo, JSON_PP));
+  file_put_contents($infoFolder.'/sizes.json', json_encode($sizes, JSON_PP));
+  file_put_contents($infoFolder.'/exif.json', json_encode($exif, JSON_PP));
+
+  if(isset($comments))
+    file_put_contents($infoFolder.'/comments.json', json_encode($comments, JSON_PP));
 }
 
