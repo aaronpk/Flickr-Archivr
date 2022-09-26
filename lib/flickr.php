@@ -19,20 +19,39 @@ function getFlickrClient() {
   return $flickr;
 }
 
-function savePhoto($info) {
+function savePhoto($info) { // can be an item from flickr.people.getPhotos or an item from flickr.photos.getInfo
   global $flickr;
 
-  # Check if it's already been saved
-  if($info['datetakenunknown']) {
-    $date = DateTime::createFromFormat('U', $info['dateupload']);
+  if(isset($info['dates'])) {
+    # This is the response from flickr.photos.getInfo
+    if($info['dates']['takenunknown']) {
+      if($date=dateFromTitle($info['title'])) {}
+      else {
+        $date = DateTime::createFromFormat('U', $info['dateuploaded']);
+      }
+    } else {
+      $date = new DateTime($info['dates']['taken']);
+    }
+  } elseif(isset($info['datetakenunknown'])) {
+    # This is the response from flickr.people.getPhotos
+    if($info['datetakenunknown']) {
+      if($date=dateFromTitle($info['title'])) {}
+      else {
+        $date = DateTime::createFromFormat('U', $info['dateupload']);
+      }
+    } else {
+      $date = new DateTime($info['datetaken']);
+    }
   } else {
-    $date = new DateTime($info['datetaken']);
+    echo "savePhoto() called with something that doesn't appear to be a Flickr photo\n";
+    return;
   }
 
   $folder = $_ENV['STORAGE_PATH'].$date->format('Y/m/d').'/'.$info['id'];
   $infoFolder = $folder.'/info';
   $sizesFolder = $folder.'/sizes';
 
+  # Check if it's already been saved
   if(file_exists($infoFolder.'/photo.json')) {
     echo "Already downloaded ".$info['id']."\n";
     return;
@@ -82,15 +101,30 @@ function savePhoto($info) {
   if(!file_exists($sizesFolder)) { mkdir($sizesFolder); }
 
   foreach($sizes as $size) {
-    $filename = ($size['label'] == 'Original' ? $folder : $sizesFolder).'/'.basename($size['source']);
+    if($size['label'] == 'Video Player')
+      continue;
+
+    if($size['media'] == 'video') {
+      # Optimistically use mp4 as the file extension, but change it later after downloaded if necessary
+      if($size['label'] == 'Video Original')
+        $filename = $folder.'/'.$info['id'].'.mp4';
+      else
+        $filename = $sizesFolder.'/'.$size['label'].'.mp4';
+    } else {
+      $filename = ($size['label'] == 'Original' ? $folder : $sizesFolder).'/'.basename($size['source']);
+    }
+
     echo "Downloading ".$size['source']." to $filename\n";
 
     $fp = fopen($filename, 'w+');
     $ch = curl_init($size['source']);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
     curl_setopt($ch, CURLOPT_FILE, $fp);
     curl_exec($ch);
     fclose($fp);
+
+    $finalURL = curl_getinfo($ch, CURLINFO_EFFECTIVE_URL);
   }
 
   // Write the json files last as an indication that the whole process has successfully completed.
@@ -103,3 +137,10 @@ function savePhoto($info) {
     file_put_contents($infoFolder.'/comments.json', json_encode($comments, JSON_PP));
 }
 
+function dateFromTitle($title) {
+  if(preg_match('/^([0-9]{4}-[0-9]{2}-[0-9]{2})/', $title, $match)) {
+    return new DateTime($match[1]);
+  } else {
+    return null;
+  }
+}
