@@ -91,6 +91,12 @@ To build an index of all the people and which photos they appear in, run the com
 php scripts/indexpeople.php
 ```
 
+Build an index of all tags in order to create tag pages
+
+```bash
+php scripts/indextags.php
+```
+
 
 ## Download Albums
 
