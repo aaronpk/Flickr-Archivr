@@ -8,7 +8,7 @@ $indexPath = $_ENV['STORAGE_PATH'].'index';
 if(!file_exists($indexPath))
   mkdir($indexPath);
 
-$index = [];
+$index = loadJSONFile($indexPath.'/people.json');
 
 foreach($photos as $photoMetaFile) {
   $peopleMetaFile = str_replace('photo.json', 'people.json', $photoMetaFile);
@@ -16,13 +16,13 @@ foreach($photos as $photoMetaFile) {
   if(file_exists($peopleMetaFile)) {
     echo "Indexing people for $peopleMetaFile\n";
 
-    $photo = json_decode(file_get_contents($photoMetaFile), true);
-    $people = json_decode(file_get_contents($peopleMetaFile), true);
+    $photo = loadJSONFile($photoMetaFile);
+    $people = loadJSONFile($peopleMetaFile);
 
     foreach($people as $person) {
       if(!isset($index[$person['nsid']]))
-        $index[$person['nsid']] = [];
-      $index[$person['nsid']][] = $photo['id'];
+        $index[$person['nsid']] = ['photos' => []];
+      $index[$person['nsid']]['photos'][] = $photo['id'];
     }
 
   }

@@ -11,7 +11,7 @@ if(!file_exists($indexPath))
 $index = [];
 
 foreach($photos as $photoMetaFile) {
-  $photo = json_decode(file_get_contents($photoMetaFile), true);
+  $photo = loadJSONFile($photoMetaFile);
 
   if(count($photo['tags']['tag'])) {
     echo "Indexing tags for ".$photo['id']."\n";
