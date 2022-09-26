@@ -52,7 +52,7 @@ function savePhoto($info, $skip_if_exists=true) { // can be an item from flickr.
   $sizesFolder = $folder.'/sizes';
 
   # Check if it's already been saved
-  if($skip_if_exists && $file_exists($infoFolder.'/photo.json')) {
+  if($skip_if_exists && file_exists($infoFolder.'/photo.json')) {
     echo "Already downloaded ".$info['id']."\n";
     return;
   }
