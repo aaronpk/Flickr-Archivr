@@ -83,6 +83,25 @@ Run the index script to build an index of all the photos. Since photos are store
 php scripts/indexphotos.php
 ```
 
+## Download Albums
+
+Albums (formerly known as photosets), can be downloaded with the command below.
+
+```bash
+php scripts/photosets.php
+```
+
+This creates a new folder with a subfolder for each album:
+
+```
+albums/
+      /XXXXXXXXX/album.json
+                /photos.json
+      /XXXXXXXXX/album.json
+                /photos.json    
+```
+
+The file `album.json` has the album metadata such as name and modified date. The file `photos.json` contains a list of all the photos in the album.
 
 
 

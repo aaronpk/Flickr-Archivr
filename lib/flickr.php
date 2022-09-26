@@ -162,3 +162,43 @@ function dateFromTitle($title) {
     return null;
   }
 }
+
+function downloadPhotoset($set) {
+  global $flickr;
+
+  $folder = $_ENV['STORAGE_PATH'].'albums/'.$set['id'];
+  if(!file_exists($folder)) {
+    mkdir($folder, 0755, true);
+  }
+
+  $result = $flickr->request('flickr.photosets.getPhotos', [
+    'photoset_id' => $set['id'],
+    'extras' => 'date_upload,date_taken',
+    'per_page' => 500,
+  ]);
+
+  if($result['photoset']['pages'] > 1) {
+    $photos = $result['photoset']['photo'];
+
+    for($i=2; $i<=$result['photoset']['pages']; $i++) {
+      $result = $flickr->request('flickr.photosets.getPhotos', [
+        'photoset_id' => $set['id'],
+        'extras' => 'date_upload,date_taken',
+        'per_page' => 500,
+        'page' => $i,
+      ]);
+
+      $photos = array_merge($photos, $result['photoset']['photo']);
+    }
+
+    file_put_contents($folder.'/photos.json', json_encode($photos, JSON_PP));
+  } else {
+    $photos = $result['photoset']['photo'];
+    file_put_contents($folder.'/photos.json', json_encode($photos, JSON_PP));
+  }
+
+  echo "Downloaded photoset ".$set['id']."\n";
+
+  file_put_contents($folder.'/album.json', json_encode($set, JSON_PP));
+}
+
