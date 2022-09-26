@@ -2,7 +2,6 @@
 require_once(__DIR__.'/../vendor/autoload.php');
 
 $photos = glob($_ENV['STORAGE_PATH'].'*/*/*/*/info/photo.json');
-print_r($photos);
 
 $indexPath = $_ENV['STORAGE_PATH'].'index';
 

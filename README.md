@@ -75,13 +75,22 @@ Each photo gets its own folder at: `YEAR/MONTH/DAY/PHOTO_ID/`. Inside the folder
   * `comments.json` - If present, all the comments on the photo
 
 
-## Index Photos
+## Build Indexes
 
-Run the index script to build an index of all the photos. Since photos are stored in a folder by date, this index helps other parts of the system find the photos on disk by just their photo ID. 
+The indexes are used for various purposes when building the web pages to browse the photos. 
+
+Since photos are stored in a folder by date, this index helps other parts of the system find the photos on disk by just their photo ID. 
 
 ```bash
 php scripts/indexphotos.php
 ```
+
+To build an index of all the people and which photos they appear in, run the command below.
+
+```bash
+php scripts/indexpeople.php
+```
+
 
 ## Download Albums
 
