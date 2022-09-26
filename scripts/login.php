@@ -1,5 +1,5 @@
 <?php
-require_once(__DIR__.'/../lib/init.php');
+require_once(__DIR__.'/../vendor/autoload.php');
 
 $flickr = new \Samwilson\PhpFlickr\PhpFlickr($_ENV['FLICKR_API_KEY'], $_ENV['FLICKR_API_SECRET']);
 
