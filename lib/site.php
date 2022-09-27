@@ -178,7 +178,7 @@ class Photo {
       foreach($this->_people as $p) {
         $people[] = [
           'name' => $p['realname'] ?? $p['username'],
-          'slug' => $p['path_alias'] ?: $p['nsid'],
+          'slug' => $p['nsid'],
         ];
       }
     }

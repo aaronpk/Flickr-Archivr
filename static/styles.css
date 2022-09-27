@@ -3,6 +3,10 @@ body {
   background: #f3f5f6;
 }
 
+a {
+  color: #006dac;
+}
+
 .gallery {
   display: flex;
   flex-wrap: wrap;
@@ -101,6 +105,10 @@ body {
   color: white;
 }
 
+.photo-tags a .size {
+  color: #898989;
+}
+
 .photo-people {
   clear: left;
 }
@@ -109,6 +117,11 @@ body {
   float: left;
   padding: 3px 10px;
   margin: 0 5px 5px 0;
+  font-size: 16px;
+}
+
+.photo-people a {
+  text-decoration: none;
 }
 
 

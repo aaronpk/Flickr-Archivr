@@ -66,7 +66,7 @@
           <div class="stat-section photo-people">
             <ul>
               {% for person in photo.people %}
-                <li>{{ person.name }}</li>
+                <li><a href="{{ root }}people/{{ person.slug }}/index.html">{{ person.name }}</a></li>
               {% endfor %}
             </ul>
           </div>

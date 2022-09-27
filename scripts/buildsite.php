@@ -107,6 +107,70 @@ foreach($allTags as $tag) {
 
 
 
+# Generate list of people
+
+$peopleIndexHTMLFilename = $_ENV['STORAGE_PATH'].'people/index.html';
+if(!file_exists($_ENV['STORAGE_PATH'].'people'))
+  mkdir($_ENV['STORAGE_PATH'].'people', 0755);
+$template->parse(file_get_contents(__DIR__.'/../templates/people.liquid'));
+
+$people = loadJSONFile($_ENV['STORAGE_PATH'].'index/people.json');
+uasort($people, function($a, $b){
+  return count($a['photos']) > count($b['photos']) ? -1 : 1;
+});
+
+$peopleData = [];
+foreach($people as $personID=>$person) {
+  $photo = Photo::createFromID($person['photos'][0]);
+  if($photo)
+    $photo = $photo->dataForTemplate();
+
+  $peopleData[] = [
+    'slug' => $personID,
+    'name' => $person['realname'] ?: $person['username'],
+    'photo' => $photo,
+  ];
+}
+
+$data = ['people' => $peopleData, 'root' => '../'];
+$html = $template->render($data);
+file_put_contents($peopleIndexHTMLFilename, $html);
+
+
+
+
+
+# Generate people pages
+
+$template->parse(file_get_contents(__DIR__.'/../templates/person.liquid'));
+
+$people = loadJSONFile($_ENV['STORAGE_PATH'].'index/people.json');
+
+foreach($people as $personID => $person) {
+
+  $personFolder = $_ENV['STORAGE_PATH'].'people/'.$personID;
+  $personHTMLFilename = $personFolder.'/index.html';
+  if(!file_exists($personFolder))
+    mkdir($personFolder, 0755);
+
+  $photos = [];
+  foreach($person['photos'] as $photoID) {
+    $photo = Photo::createFromID($photoID);
+    if($photo)
+      $photos[] = $photo->dataForTemplate();
+  }
+
+  echo $personHTMLFilename."\n";
+
+  $data = ['person' => $person, 'photos' => $photos, 'root' => '../../'];
+  $html = $template->render($data);
+  file_put_contents($personHTMLFilename, $html);
+
+}
+
+
+
+
 # Generate photo permalinks
 
 $photos = glob($_ENV['STORAGE_PATH'].'*/*/*/*/info/photo.json');

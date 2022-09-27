@@ -9,7 +9,7 @@
         <div class="photo-tags">
           <ul>
             {% for tag in tags %}
-              <li><a href="{{ tag.slug }}/index.html">{{ tag.name }} ({{ tag.photos | size }})</a></li>
+              <li><a href="{{ tag.slug }}/index.html">{{ tag.name }} <span class="size">({{ tag.photos | size }})</span></a></li>
             {% endfor %}
           </ul>
         </div>

@@ -1,0 +1,30 @@
+{% include 'layouts/header.liquid' %}
+
+  <div class="container">
+    <div class="row">
+
+      <div class="col-md-12 col-12">
+
+        <ul class="gallery">
+          {% for person in people %}
+
+            <li class="item">
+              <span>
+                {% if person.photo and person.photo.thumbnail %}
+                  <a href="{{ person.slug }}/index.html" class="thumb">
+                    <img src="{{ root }}{{ person.photo.thumbnail }}" width="150" height="150">
+                  </a>
+                {% endif %}
+                <a href="{{ person.slug }}/index.html" class="title">{{ person.name }}</a>
+              </span>
+            </li>
+
+          {% endfor %}
+        </ul>
+
+      </div>
+
+    </div>
+  </div>
+
+{% include 'layouts/footer.liquid' %}

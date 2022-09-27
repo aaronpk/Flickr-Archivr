@@ -10,6 +10,10 @@ if(!file_exists($indexPath))
 
 $index = loadJSONFile($indexPath.'/people.json');
 
+foreach($index as $personID => $data) {
+  $index[$personID]['photos'] = [];
+}
+
 foreach($photos as $photoMetaFile) {
   $peopleMetaFile = str_replace('photo.json', 'people.json', $photoMetaFile);
 
@@ -22,6 +26,7 @@ foreach($photos as $photoMetaFile) {
     foreach($people as $person) {
       if(!isset($index[$person['nsid']]))
         $index[$person['nsid']] = ['photos' => []];
+
       $index[$person['nsid']]['photos'][] = $photo['id'];
     }
 
