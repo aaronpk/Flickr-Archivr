@@ -1,4 +1,4 @@
-{% include 'layouts/header.html' %}
+{% include 'layouts/header.liquid' %}
 
   <div class="container">
     <div class="row photo-page">
@@ -56,7 +56,7 @@
           <div class="stat-section photo-tags">
             <ul>
               {% for tag in photo.tags %}
-                <li>{{ tag.raw }}</li>
+                <li><a href="{{ root }}tags/{{ tag._content }}/index.html">{{ tag.raw }}</a></li>
               {% endfor %}
             </ul>
           </div>
@@ -77,4 +77,4 @@
     </div>
   </div>
 
-{% include 'layouts/footer.html' %}
+{% include 'layouts/footer.liquid' %}

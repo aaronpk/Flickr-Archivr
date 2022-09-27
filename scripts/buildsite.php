@@ -25,6 +25,8 @@ shell_exec('cp -R '.__DIR__.'/../static '.$_ENV['STORAGE_PATH'].'assets');
 $albums = glob($_ENV['STORAGE_PATH'].'albums/*/album.json');
 $allAlbums = [];
 
+$template->parse(file_get_contents(__DIR__.'/../templates/album.liquid'));
+
 foreach($albums as $albumMetaFile) {
   $album = Album::createFromMetaFile($albumMetaFile);
 
@@ -32,7 +34,6 @@ foreach($albums as $albumMetaFile) {
 
   $albumHTMLFilename = $_ENV['STORAGE_PATH'].'albums/'.$album->albumID().'/index.html';
 
-  $template->parse(file_get_contents(__DIR__.'/../templates/album.html'));
   $data = $album->dataForTemplate();
   $data['root'] = '../../';
   $data['pagetitle'] = $data['album']['title'];
@@ -45,7 +46,7 @@ foreach($albums as $albumMetaFile) {
 # Generate list of albums
 
 $albumIndexHTMLFilename = $_ENV['STORAGE_PATH'].'albums/index.html';
-$template->parse(file_get_contents(__DIR__.'/../templates/albums.html'));
+$template->parse(file_get_contents(__DIR__.'/../templates/albums.liquid'));
 usort($allAlbums, function($a, $b){
   return $a['album']['date_create'] > $b['album']['date_create'] ? -1 : 1;
 });
@@ -69,7 +70,7 @@ foreach($photos as $photoMetaFile) {
 
   $photoHTMLFilename = $_ENV['STORAGE_PATH'].$photo->basePath.'index.html';
 
-  $template->parse(file_get_contents(__DIR__.'/../templates/photo.html'));
+  $template->parse(file_get_contents(__DIR__.'/../templates/photo.liquid'));
   $photoData = $photo->dataForTemplate();
   $data = [
     'pagetitle' => $photoData['title'],
