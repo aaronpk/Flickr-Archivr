@@ -1,0 +1,32 @@
+{% include 'layouts/header.html' %}
+
+  <div class="container">
+    <div class="row">
+
+      <div class="col-md-12 col-12">
+
+        <h2 class="album-title">{{ album.title }}</h2>
+
+          <ul class="gallery">
+            {% for photo in photos %}
+
+              <li class="item">
+                <span>
+                  {% if photo.thumbnail %}
+                    <a href="{{ root }}{{ photo.relative_url }}" class="thumb">
+                      <img src="{{ root }}{{ photo.thumbnail }}" width="150" height="150">
+                    </a>
+                  {% endif %}
+                  <a href="{{ root }}{{ photo.relative_url }}" class="title">{{ photo.title }}</a>
+                </span>
+              </li>
+
+            {% endfor %}
+          </ul>
+
+      </div>
+
+    </div>
+  </div>
+
+{% include 'layouts/footer.html' %}

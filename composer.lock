@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "25e8efbb749cd55e20c87ea4bcb79f18",
+    "content-hash": "2a6c847da1bc1c65dfa744a5b32cc330",
     "packages": [
         {
             "name": "carlos-mg89/oauth",
@@ -135,6 +135,75 @@
                 }
             ],
             "time": "2022-07-30T15:56:11+00:00"
+        },
+        {
+            "name": "liquid/liquid",
+            "version": "1.4.32",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/kalimatas/php-liquid.git",
+                "reference": "f0be8a3e0e0fcee99c0091748dcb21675b3caf46"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/kalimatas/php-liquid/zipball/f0be8a3e0e0fcee99c0091748dcb21675b3caf46",
+                "reference": "f0be8a3e0e0fcee99c0091748dcb21675b3caf46",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.3 || ^8.0"
+            },
+            "require-dev": {
+                "ergebnis/composer-normalize": "^2.8",
+                "friendsofphp/php-cs-fixer": "^2.16.4",
+                "infection/infection": ">=0.17.6",
+                "php-coveralls/php-coveralls": "^2.2",
+                "phpunit/phpunit": "^9.2.6"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Liquid\\": "src/Liquid"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Guz Alexander",
+                    "email": "kalimatas@gmail.com",
+                    "homepage": "http://guzalexander.com"
+                },
+                {
+                    "name": "Harald Hanek"
+                },
+                {
+                    "name": "Mateo Murphy"
+                },
+                {
+                    "name": "Alexey Kopytko",
+                    "email": "alexey@kopytko.com",
+                    "homepage": "https://www.alexeykopytko.com/"
+                }
+            ],
+            "description": "Liquid template engine for PHP",
+            "homepage": "https://github.com/kalimatas/php-liquid",
+            "keywords": [
+                "liquid",
+                "template"
+            ],
+            "support": {
+                "issues": "https://github.com/kalimatas/php-liquid/issues",
+                "source": "https://github.com/kalimatas/php-liquid/tree/1.4.32"
+            },
+            "time": "2022-08-08T01:55:20+00:00"
         },
         {
             "name": "phpoption/phpoption",

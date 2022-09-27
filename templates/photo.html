@@ -1,0 +1,80 @@
+{% include 'layouts/header.html' %}
+
+  <div class="container">
+    <div class="row photo-page">
+
+      <div class="col-md-8 col-12">
+
+        <div class="photo-img">
+          <img src="{{ photo.main_img }}" style="max-width: 100%;">
+        </div>
+        <h2 class="photo-title">{{ photo.title }}</h2>
+        <p class="photo-description">{{ photo.description | raw }}</p>
+
+        <div class="comments">
+          <ul>
+            {% for comment in photo.comments %}
+              <li class="comment">
+                <p class="comment-author">
+                  {% if comment.author_is_deleted %}
+                    {{ comment.realname | default: comment.authorname }} (deleted)
+                  {% else %}
+                    <a href="https://flickr.com/photos/{{ comment.author }}" class="author">{{ comment.realname | default: comment.authorname }}</a>
+                  {% endif %}
+                  <span class="comment-date">{{ comment.display_date }}</span>
+                </p>
+                <span class="comment-text">{{ comment._content | raw }}</span>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+
+      </div>
+      <div class="col-md-4 col-12">
+
+
+        <div class="stat-section date-taken">Taken on {{ photo.date.display_date }}</div>
+
+        <div class="stat-section photo-stats">
+          <div class="stat">
+            <div class="value">{{ photo.stats.views }}</div>
+            <div class="label">views</div>
+          </div>
+          <div class="stat">
+            <div class="value">{{ photo.stats.comments }}</div>
+            <div class="label">comments</div>
+          </div>
+        </div>
+
+        {% if photo.albums %}
+          <div class="stat-section photo-in-albums">
+
+          </div>
+        {% endif %}
+
+        {% if photo.tags %}
+          <div class="stat-section photo-tags">
+            <ul>
+              {% for tag in photo.tags %}
+                <li>{{ tag.raw }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+        {% endif %}
+
+        {% if photo.people %}
+          <div class="stat-section photo-people">
+            <ul>
+              {% for person in photo.people %}
+                <li>{{ person.name }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+        {% endif %}
+
+      </div>
+
+    </div>
+  </div>
+
+{% include 'layouts/footer.html' %}
