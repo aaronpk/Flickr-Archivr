@@ -140,7 +140,6 @@ $html = $template->render($data);
 file_put_contents($indexHTMLFilename, $html);
 
 
-die();
 
 
 
