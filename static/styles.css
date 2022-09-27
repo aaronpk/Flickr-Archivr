@@ -1,0 +1,153 @@
+
+body {
+  background: #f3f5f6;
+}
+
+.gallery {
+  display: flex;
+  flex-wrap: wrap;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.gallery .item {
+  flex-grow: 1;
+  width: 170px;
+  margin: 0;
+  padding: 0;
+}
+
+.gallery .item span {
+  padding: 10px;  
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+
+.gallery .item a {
+  text-decoration: none;
+}
+
+
+
+
+/* Photo Permalinks */
+
+.photo-page {
+  margin-top: 20px;
+}
+
+.photo-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-top: 30px;
+}
+
+.stat-section {
+  padding-top: 10px;
+  border-top: #cfd6d9 1px solid;
+  padding-bottom: 10px;
+}
+
+.photo-stats {
+  display: flex;
+  flex-direction: row;
+  font-size: 20px;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.photo-stats .stat {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.photo-stats .stat .label {
+  font-size: 14px;
+  color: #898989;
+}
+
+.photo-tags {
+  clear: left;
+}
+
+.photo-tags ul, .photo-people ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.photo-tags ul li {
+  float: left;
+  padding: 3px 10px;
+  margin: 0 5px 5px 0;
+  background: #cfd6d9;
+  border-radius: 5px;
+}
+
+.photo-people {
+  clear: left;
+}
+
+.photo-people ul li {
+  float: left;
+  padding: 3px 10px;
+  margin: 0 5px 5px 0;
+}
+
+
+.photo-description {
+}
+
+.comments {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: #cfd6d9 1px solid;
+  margin-bottom: 60px;
+}
+
+.comments ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.comments .comment {
+  transition: background-color .15s ease-in-out;
+  margin: 5px 0 0;
+  min-height: 32px;
+  overflow: hidden;
+  padding: 5px 0 5px 0;
+}
+
+.comments .comment:hover {
+  background-color: #fff;
+}
+
+.comments .comment a.author {
+  color: #006dac;
+}
+
+.comment a.mention, .comment a.author {
+  text-decoration: none;
+}
+
+.comments .comment .comment-author {
+  font-size: 16px;
+  margin: 2px 0 2px 0;
+}
+
+.comments .comment .comment-text {
+  font-size: 14px;
+}
+
+.comment .comment-author {
+  margin-bottom: 0;
+}
+
+.comment .comment-date {
+  color: #898989;
+  font-size: 0.9em;
+}
