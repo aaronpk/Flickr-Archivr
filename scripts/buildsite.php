@@ -19,6 +19,10 @@ shell_exec('cp -R '.__DIR__.'/../static '.$_ENV['STORAGE_PATH'].'assets');
 
 
 
+# Generate home page
+
+
+
 
 # Generate all albums
 
@@ -53,6 +57,53 @@ usort($allAlbums, function($a, $b){
 $data = ['albums' => $allAlbums, 'root' => '../'];
 $html = $template->render($data);
 file_put_contents($albumIndexHTMLFilename, $html);
+
+
+
+# Generate list of tags
+
+$tagIndexHTMLFilename = $_ENV['STORAGE_PATH'].'tags/index.html';
+if(!file_exists($_ENV['STORAGE_PATH'].'tags'))
+  mkdir($_ENV['STORAGE_PATH'].'tags', 0755);
+$template->parse(file_get_contents(__DIR__.'/../templates/tags.liquid'));
+
+$allTags = array_values(loadJSONFile($_ENV['STORAGE_PATH'].'index/tags.json'));
+usort($allTags, function($a, $b){
+  return count($a['photos']) > count($b['photos']) ? -1 : 1;
+});
+
+$data = ['tags' => $allTags, 'root' => '../'];
+$html = $template->render($data);
+file_put_contents($tagIndexHTMLFilename, $html);
+
+
+
+# Generate tag pages
+
+$template->parse(file_get_contents(__DIR__.'/../templates/tag.liquid'));
+
+foreach($allTags as $tag) {
+
+  $tagFolder = $_ENV['STORAGE_PATH'].'tags/'.$tag['slug'];
+  $tagHTMLFilename = $tagFolder.'/index.html';
+  if(!file_exists($tagFolder))
+    mkdir($tagFolder, 0755);
+
+  $photos = [];
+  foreach($tag['photos'] as $photoID) {
+    $photo = Photo::createFromID($photoID);
+    if($photo)
+      $photos[] = $photo->dataForTemplate();
+  }
+
+  echo $tagHTMLFilename."\n";
+
+  $data = ['tag' => $tag, 'photos' => $photos, 'root' => '../../'];
+  $html = $template->render($data);
+  file_put_contents($tagHTMLFilename, $html);
+
+}
+
 
 
 

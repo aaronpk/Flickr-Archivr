@@ -1,0 +1,23 @@
+{% include 'layouts/header.liquid' %}
+
+  <div class="container">
+    <div class="row">
+
+      <div class="col-md-12 col-12">
+
+
+        <div class="photo-tags">
+          <ul>
+            {% for tag in tags %}
+              <li><a href="{{ tag.slug }}/index.html">{{ tag.name }} ({{ tag.photos | size }})</a></li>
+            {% endfor %}
+          </ul>
+        </div>
+
+
+      </div>
+
+    </div>
+  </div>
+
+{% include 'layouts/footer.liquid' %}

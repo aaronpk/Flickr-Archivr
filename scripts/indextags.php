@@ -17,14 +17,19 @@ foreach($photos as $photoMetaFile) {
     echo "Indexing tags for ".$photo['id']."\n";
 
     foreach($photo['tags']['tag'] as $tag) {
-      $tagName = $tag['raw'];
+      $tagName = $tag['_content'];
 
       echo "\t".$tagName."\n";
 
-      if(!isset($index[$tagName]))
-        $index[$tagName] = [];
+      if(!isset($index[$tagName])) {
+        $index[$tagName] = [
+          'photos' => [], 
+          'name' => $tag['raw'], 
+          'slug' => $tag['_content']
+        ];
+      }
 
-      $index[$tagName][] = $photo['id'];
+      $index[$tagName]['photos'][] = $photo['id'];
     }
 
   }
