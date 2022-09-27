@@ -17,7 +17,10 @@ if(isset($progress['page'])) {
 }
 
 
-$skip_if_exists = ($argv[1] == 're-download' ? false : true);
+if(isset($argv[1]))
+  $skip_if_exists = ($argv[1] == 're-download' ? false : true);
+else
+  $skip_if_exists = true;
 
 
 // Process the current page
