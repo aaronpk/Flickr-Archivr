@@ -183,7 +183,7 @@ function sizeToFilename($id, $size) {
   $sizesFolder = 'sizes/';
 
   if($size['media'] == 'video') {
-    # Optimistically use mp4 as the file extension, but change it later after downloaded if necessary
+    # Optimistically use mp4 as the file extension
     if($size['label'] == 'Video Original')
       $filename = $id.'.mp4';
     else

@@ -111,9 +111,9 @@ class Photo {
     foreach($this->_sizes as $size) {
       if($size['label'] == $label) {
         if($type == 'relative') # for photo permalinks
-          return 'sizes/' . basename($size['source']);
+          return sizeToFilename($this->_photo['id'], $size);
         else
-          return $this->basePath . 'sizes/' . basename($size['source']);
+          return $this->basePath . sizeToFilename($this->_photo['id'], $size);
       }
     }
   }
