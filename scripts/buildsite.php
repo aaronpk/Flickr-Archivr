@@ -36,6 +36,9 @@ foreach($yearFolders as $yf) {
   $months = [];
 
   $monthFolders = glob($_ENV['STORAGE_PATH'].$year.'/*');
+  $monthFolders = array_filter($monthFolders, function($y){
+    return is_numeric(basename($y));
+  });
   usort($monthFolders, function($a, $b){
     return basename($a) > basename($b) ? -1 : 1;
   });
@@ -45,6 +48,9 @@ foreach($yearFolders as $yf) {
     $days = [];
 
     $dayFolders = glob($_ENV['STORAGE_PATH'].$year.'/'.$month.'/*');
+    $dayFolders = array_filter($dayFolders, function($y){
+      return is_numeric(basename($y));
+    });
     usort($dayFolders, function($a, $b){
       return basename($a) > basename($b) ? -1 : 1;
     });
@@ -52,37 +58,78 @@ foreach($yearFolders as $yf) {
     foreach($dayFolders as $df) {
       $day = basename($df);
 
-      $photos = glob($df.'/*');
-      $photo = Photo::createFromMetaFile($photos[0].'/info/photo.json');
+      $photoFiles = glob($df.'/*');
+      $photoFiles = array_filter($photoFiles, function($y){
+        return is_numeric(basename($y));
+      });
+      $photo = Photo::createFromMetaFile($photoFiles[0].'/info/photo.json');
       if($photo) {
         $thumbnail = $photo->urlForSize('Large Square');
       } else {
         $thumbnail = null;
       }
 
-      $days[] = [
+      $photos = [];
+
+      foreach($photoFiles as $pf) {
+        $photo = Photo::createFromMetaFile($pf.'/info/photo.json');
+        if($photo) 
+          $photos[] = $photo->dataForTemplate();
+      }
+
+      $date = new DateTime($year.'-'.$month.'-'.$day);
+
+      $dayData = [
         'slug' => $day,
         'name' => (int)$day,
+        'full_name' => $date->format('F j, Y'),
+        'md_name' => $date->format('M j'),
         'thumbnail' => $thumbnail,
+        'photos' => $photos,
+        'num_photos' => count($photos),
       ];
+
+      $days[] = $dayData;
+
+      $dayHTMLFilename = $_ENV['STORAGE_PATH'].$year.'/'.$month.'/'.$day.'/index.html';
+      $template->parse(file_get_contents(__DIR__.'/../templates/day.liquid'));
+      $data = ['day' => $dayData, 'month' => $month, 'year' => $year, 'root' => '../../../'];
+      $html = $template->render($data);
+      file_put_contents($dayHTMLFilename, $html);
     }
 
     $date = new DateTime($year.'-'.$month.'-01');
-    $months[] = [
+    $monthData = [
       'slug' => $month,
       'name' => $date->format('F'),
+      'full_name' => $date->format('F Y'),
       'days' => $days,
     ];
+
+    $months[] = $monthData;
+
+    $monthHTMLFilename = $_ENV['STORAGE_PATH'].$year.'/'.$month.'/index.html';
+    $template->parse(file_get_contents(__DIR__.'/../templates/month.liquid'));
+    $data = ['month' => $monthData, 'year' => $year, 'root' => '../../'];
+    $html = $template->render($data);
+    file_put_contents($monthHTMLFilename, $html);
   }
 
-  $years[] = [
+  $yearData = [
     'slug' => $year,
     'name' => $year,
     'months' => $months,
   ];
+
+  $years[] = $yearData;
+
+  $yearHTMLFilename = $_ENV['STORAGE_PATH'].$year.'/index.html';
+  $template->parse(file_get_contents(__DIR__.'/../templates/year.liquid'));
+  $data = ['year' => $yearData, 'root' => '../'];
+  $html = $template->render($data);
+  file_put_contents($yearHTMLFilename, $html);
 }
 
-print_r($years);
 
 
 $indexHTMLFilename = $_ENV['STORAGE_PATH'].'index.html';

@@ -6,14 +6,13 @@
       <div class="col-md-12 col-12">
 
         <div class="years">
-          {% for year in years %}
 
             <div class="year">
-              <h2 class="year-title"><a href="{{ root }}{{ year.slug }}/index.html">{{ year.name }}</a></h2>
+              <h2 class="year-title">{{ year.name }}</h2>
 
               <div class="months">
                 {% for month in year.months %}
-                  <h3 class="month-title"><a href="{{ root }}{{ year.name }}/{{ month.slug }}/index.html">{{ month.full_name }}</a></h3>
+                  <h3 class="month-title"><a href="{{ root }}{{ year.name }}/{{ month.slug }}/index.html">{{ month.name }}</a></h3>
 
                   <ul class="gallery">
                     {% for day in month.days %}
@@ -39,7 +38,6 @@
               </div>
             </div>
 
-          {% endfor %}
         </div>
 
       </div>

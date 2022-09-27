@@ -8,9 +8,24 @@ a {
 }
 
 
-.year-title a, .month-title a {
+.year-title a, .month-title a, .day-title a {
   text-decoration: none;
 }
+
+.day-title {
+  font-size: 19px;
+  font-weight: 600;
+}
+
+.month-gallery, .years .year {
+  margin-top: 40px;
+}
+
+
+.photo-count, a .photo-count {
+  color: #898989;
+}
+
 
 
 
@@ -29,7 +44,7 @@ a {
   padding: 0;
 }
 
-.gallery .item span {
+.gallery .item > span {
   padding: 10px;  
   display: flex;
   flex-direction: column;
