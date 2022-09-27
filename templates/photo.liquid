@@ -56,7 +56,7 @@
           <div class="stat-section photo-tags">
             <ul>
               {% for tag in photo.tags %}
-                <li><a href="{{ root }}tags/{{ tag._content }}/index.html">{{ tag.raw }}</a></li>
+                <li><a href="{{ root }}tags/{{ tag._content | url_encode }}/index.html">{{ tag.raw }}</a></li>
               {% endfor %}
             </ul>
           </div>
