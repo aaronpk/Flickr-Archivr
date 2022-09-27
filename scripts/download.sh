@@ -10,4 +10,7 @@ while [ $result -eq 1 ]; do
   sleep 5
 done
 
+php downloadpeople.php
+php photosets.php
+
 echo Finished successfully
