@@ -14,5 +14,5 @@ if(!isset($result['photo'])) {
 
 $photo = $result['photo'];
 
-savePhoto($photo, false);
+savePhoto($photo, false, false);
 

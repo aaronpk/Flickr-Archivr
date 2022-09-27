@@ -17,6 +17,9 @@ if(isset($progress['page'])) {
 }
 
 
+$skip_if_exists = ($argv[1] == 're-download' ? false : true);
+
+
 // Process the current page
 $photos = processPage($page);
 
@@ -28,7 +31,7 @@ for($i=$page+1; $i<$photos['pages']; $i++) {
 
 
 function processPage($page) {
-  global $flickr, $progress, $progressFile;
+  global $flickr, $progress, $progressFile, $skip_if_exists;
 
   echo "Processing page $page\n";
 
@@ -48,7 +51,7 @@ function processPage($page) {
 
   try {
     foreach($photos['photo'] as $photo) {
-      savePhoto($photo);
+      savePhoto($photo, $skip_if_exists);
     }
   } catch(Exception $e) {
     $message = $e->getMessage();
