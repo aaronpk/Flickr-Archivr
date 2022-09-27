@@ -1,0 +1,47 @@
+{% include 'layouts/header.liquid' %}
+
+  <div class="container">
+    <div class="row">
+
+      <div class="col-md-12 col-12">
+
+        <div class="years">
+          {% for year in years %}
+
+            <div class="year">
+              <h2 class="year-title"><a href="{{ root }}{{ year.slug }}/index.html">{{ year.name }}</a></h2>
+
+              <div class="months">
+                {% for month in year.months %}
+                  <h3 class="month-title"><a href="{{ root }}{{ year.name }}/{{ month.slug }}/index.html">{{ month.name }}</a></h3>
+
+                  <ul class="gallery">
+                    {% for day in month.days %}
+
+                      <li class="item">
+                        <span>
+                          {% if day.thumbnail %}
+                            <a href="{{ root }}{{ year.name }}/{{ month.slug }}/{{ day.slug }}/index.html" class="thumb">
+                              <img src="{{ root }}{{ day.thumbnail }}" width="150" height="150">
+                            </a>
+                          {% endif %}
+                          <a href="{{ root }}{{ year.name }}/{{ month.slug }}/{{ day.slug }}/index.html" class="title">{{ day.name }}</a>
+                        </span>
+                      </li>
+
+                    {% endfor %}
+                  </ul>
+
+                {% endfor %}
+              </div>
+            </div>
+
+          {% endfor %}
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+{% include 'layouts/footer.liquid' %}

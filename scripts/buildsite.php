@@ -21,6 +21,80 @@ shell_exec('cp -R '.__DIR__.'/../static '.$_ENV['STORAGE_PATH'].'assets');
 
 # Generate home page
 
+$yearFolders = glob($_ENV['STORAGE_PATH'].'*');
+$yearFolders = array_filter($yearFolders, function($y){
+  return is_numeric(basename($y));
+});
+usort($yearFolders, function($a, $b){
+  return basename($a) > basename($b) ? -1 : 1;
+});
+
+$years = [];
+foreach($yearFolders as $yf) {
+  $year = basename($yf);
+  echo $year."\n";
+  $months = [];
+
+  $monthFolders = glob($_ENV['STORAGE_PATH'].$year.'/*');
+  usort($monthFolders, function($a, $b){
+    return basename($a) > basename($b) ? -1 : 1;
+  });
+
+  foreach($monthFolders as $mf) {
+    $month = basename($mf);
+    $days = [];
+
+    $dayFolders = glob($_ENV['STORAGE_PATH'].$year.'/'.$month.'/*');
+    usort($dayFolders, function($a, $b){
+      return basename($a) > basename($b) ? -1 : 1;
+    });
+
+    foreach($dayFolders as $df) {
+      $day = basename($df);
+
+      $photos = glob($df.'/*');
+      $photo = Photo::createFromMetaFile($photos[0].'/info/photo.json');
+      if($photo) {
+        $thumbnail = $photo->urlForSize('Large Square');
+      } else {
+        $thumbnail = null;
+      }
+
+      $days[] = [
+        'slug' => $day,
+        'name' => (int)$day,
+        'thumbnail' => $thumbnail,
+      ];
+    }
+
+    $date = new DateTime($year.'-'.$month.'-01');
+    $months[] = [
+      'slug' => $month,
+      'name' => $date->format('F'),
+      'days' => $days,
+    ];
+  }
+
+  $years[] = [
+    'slug' => $year,
+    'name' => $year,
+    'months' => $months,
+  ];
+}
+
+print_r($years);
+
+
+$indexHTMLFilename = $_ENV['STORAGE_PATH'].'index.html';
+$template->parse(file_get_contents(__DIR__.'/../templates/index.liquid'));
+
+$data = ['years' => $years, 'root' => './'];
+$html = $template->render($data);
+file_put_contents($indexHTMLFilename, $html);
+
+
+die();
+
 
 
 

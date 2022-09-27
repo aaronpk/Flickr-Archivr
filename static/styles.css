@@ -7,6 +7,13 @@ a {
   color: #006dac;
 }
 
+
+.year-title a, .month-title a {
+  text-decoration: none;
+}
+
+
+
 .gallery {
   display: flex;
   flex-wrap: wrap;
