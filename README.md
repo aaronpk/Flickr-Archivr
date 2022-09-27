@@ -1,5 +1,10 @@
 # Flickr Archivr
 
+This project downloads your entire Flickr archive and turns it into a static website. 
+
+You can browse the website directly from your filesystem or you can upload the photos to a web server to make it public. The photos are stored on disk organized by date so you can even browse the files just by navigating the folders on your computer.
+
+
 ## Getting Started
 
 Copy `.env.example` to `.env`
