@@ -38,12 +38,22 @@ function processPage($page) {
 
   echo "Processing page $page\n";
 
-  $result = $flickr->request('flickr.people.getPhotos', [
-    'user_id' => 'me',
-    'per_page' => 10,
-    'page' => $page,
-    'extras' => 'date_upload,date_taken',
-  ]);
+  try {
+    $result = $flickr->request('flickr.people.getPhotos', [
+      'user_id' => 'me',
+      'per_page' => 10,
+      'page' => $page,
+      'extras' => 'date_upload,date_taken',
+    ]);
+  } catch(Exception $e) {
+    $message = $e->getMessage();
+    if(($p=strpos($message, '<!DOCTYPE html>')) !== false) {
+      $message = substr($message, 0, $p);
+    }
+    echo "EXCEPTION: ".$message."\n";
+    die(1);
+    # try again
+  }
 
   if(!isset($result['photos'])) {
     echo "Error downloading photos\n";
