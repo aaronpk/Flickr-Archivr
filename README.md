@@ -20,16 +20,37 @@ Log in to get your access token:
 php scripts/login.php
 ```
 
-After successfully authorizing the app, it will give you two lines to add to your `.env` file
+After successfully authorizing the app, it will give you two lines to add to your `.env` file.
 
+```bash
+FLICKR_ACCESS_TOKEN=
+FLICKR_ACCESS_TOKEN_SECRET=
+```
 
 ## Downloading your Flickr Archive
 
-Choose a folder to download everything into. It may require a lot of disk space since it will download every resolution of all your photos. Put the full path to the folder in the `.env` file, make sure to include a trailing slash.
+Choose a folder to download everything into. Put the full path to the folder in the `.env` file, make sure to include a trailing slash.
+
+Make sure you have enough disk space in the chosen location! For reference, Flickr says I have 120gb of photos, and once this script downloaded all the different resolutions, it took 255gb on disk.
+
+```bash
+STORAGE_PATH=/path/to/photos/
+```
+
+Then start the download:
 
 ```bash
 php scripts/download.php
 ```
+
+Since Flickr sometimes throws a 500 server error randomly, you can instead run the wrapper script which will retry when errors are encountered.
+
+```bash
+./scripts/download.sh
+```
+
+This will also download your album and people metadata as well.
+
 
 ### Folder Structure
 
@@ -72,12 +93,42 @@ Photos are downloaded to a folder structure like the below, based on the date th
 Each photo gets its own folder at: `YEAR/MONTH/DAY/PHOTO_ID/`. Inside the folder are:
 
 * The original photo stored as `PHOTO_ID.jpg`
-* A folder with every other size that Flickr provides, as `sizes/PHOTO_ID_SIZE.jpg`
+* A folder with every other size that Flickr provides, as `sizes/PHOTOID_SIZE.jpg`
 * A folder with JSON files containing
   * `photo.json` - The photo info including title, description, dates, tags, etc
   * `exif.json` - The complete exif data
   * `sizes.json` - Info about all the sizes of the photo available
   * `comments.json` - If present, all the comments on the photo
+
+
+### Download Albums
+
+Albums (formerly known as photosets), can be downloaded with the command below.
+
+```bash
+php scripts/photosets.php
+```
+
+This creates a new folder with a subfolder for each album:
+
+```
+albums/
+      /XXXXXXXXX/album.json
+                /photos.json
+      /XXXXXXXXX/album.json
+                /photos.json    
+```
+
+The file `album.json` has the album metadata such as name and modified date. The file `photos.json` contains a list of all the photos in the album.
+
+
+### Download People
+
+If you've tagged people in your photos, you can download metadata about them so their name and link appears in your archive.
+
+```bash
+php scripts/downloadpeople.php
+```
 
 
 ## Build Indexes
@@ -102,26 +153,29 @@ Build an index of all tags in order to create tag pages
 php scripts/indextags.php
 ```
 
-
-## Download Albums
-
-Albums (formerly known as photosets), can be downloaded with the command below.
+Note: You can build all indexes with the bash script included:
 
 ```bash
-php scripts/photosets.php
+./scripts/index.sh
 ```
 
-This creates a new folder with a subfolder for each album:
+This just runs the three php scripts sequentially.
 
+
+
+## Build the Site
+
+After everything is downloaded, build the static website:
+
+```bash
+./scripts/build.sh
 ```
-albums/
-      /XXXXXXXXX/album.json
-                /photos.json
-      /XXXXXXXXX/album.json
-                /photos.json    
+
+Now you can browse your website by opening up the storage folder in a browser! If you have the folder locally on disk, just open the `index.html` file. If you've run this on a remote server, you can configure your web server to serve that folder, or run the built in PHP server:
+
+```bash
+php -S 0.0.0.0:8080 -t photos
 ```
 
-The file `album.json` has the album metadata such as name and modified date. The file `photos.json` contains a list of all the photos in the album.
-
-
+Replace `photos` with the path to where you
 
