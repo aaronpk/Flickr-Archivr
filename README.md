@@ -177,5 +177,6 @@ Now you can browse your website by opening up the storage folder in a browser! I
 php -S 0.0.0.0:8080 -t photos
 ```
 
-Replace `photos` with the path to where you
+Replace `photos` with the path you configured as the `STORAGE_PATH` where your photos have been downloaded.
+
 
