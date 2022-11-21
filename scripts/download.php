@@ -22,6 +22,7 @@ if(isset($argv[1]))
 else
   $skip_if_exists = true;
 
+$originals_only = $_ENV['ORIGINALS_ONLY']  == 'true';
 
 // Process the current page
 $photos = processPage($page);
@@ -34,7 +35,7 @@ for($i=$page+1; $i<$photos['pages']; $i++) {
 
 
 function processPage($page) {
-  global $flickr, $progress, $progressFile, $skip_if_exists;
+  global $flickr, $progress, $progressFile, $skip_if_exists, $originals_only;
 
   echo "Processing page $page\n";
 
@@ -64,7 +65,7 @@ function processPage($page) {
 
   try {
     foreach($photos['photo'] as $photo) {
-      savePhoto($photo, $skip_if_exists);
+      savePhoto($photo, $skip_if_exists, true, $originals_only);
     }
   } catch(Exception $e) {
     $message = $e->getMessage();
