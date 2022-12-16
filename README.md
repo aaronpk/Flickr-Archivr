@@ -7,6 +7,8 @@ You can browse the website directly from your filesystem or you can upload the p
 
 ## Getting Started
 
+Install PHP and the `curl` and `simplexml` extensions. [Install Composer](https://getcomposer.org/download/). Run `composer install`.
+
 Copy `.env.example` to `.env`
 
 Start by creating an app for the Flickr API.
