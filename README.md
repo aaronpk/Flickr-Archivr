@@ -7,7 +7,13 @@ You can browse the website directly from your filesystem or you can upload the p
 
 ## Getting Started
 
-Install PHP and the `curl` and `simplexml` extensions. [Install Composer](https://getcomposer.org/download/). Run `composer install`.
+Install PHP and the `curl` and `simplexml` extensions. [Install Composer](https://getcomposer.org/download/). 
+
+Install the project dependencies by running 
+
+```
+composer install
+```
 
 Copy `.env.example` to `.env`
 
