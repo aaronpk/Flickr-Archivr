@@ -61,7 +61,8 @@ function getPhotoDate($info) {
 // can be an item from flickr.people.getPhotos or an item from flickr.photos.getInfo
 // skip_if_exists will check for the metadata file and skip the entire photo if found
 // skip_download_if_exists will make all API calls, but will skip downloading the images if they already exist
-function savePhoto($info, $skip_if_exists=true, $skip_download_if_exists=true) {
+// originals_only only downloads sizes that contain 'Original' and skip the rest
+function savePhoto($info, $skip_if_exists=true, $skip_download_if_exists=true, $originals_only=false) {
   global $flickr;
 
   $date = getPhotoDate($info);
@@ -138,6 +139,9 @@ function savePhoto($info, $skip_if_exists=true, $skip_download_if_exists=true) {
 
   foreach($sizes as $size) {
     if($size['label'] == 'Video Player')
+      continue;
+
+    if($originals_only && !str_contains($size['label'], 'Original'))
       continue;
 
     $filename = $folder.'/'.sizeToFilename($info['id'], $size);
